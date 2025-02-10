@@ -1,0 +1,33 @@
+### Rota para listar produtos
+
+GET http://localhost:3000/
+
+Content-Type: application/json
+
+### 
+
+### Rota para cadastrar produtos
+POST http://localhost:3000/
+Content-Type: application/json 
+
+{
+    "id":1,
+    "nome": "Monitor 24",
+    "preco": 1500,
+    "quantidade": 14
+}
+
+### Editar produtos
+POST http://localhost:3000/1
+Content-Type: application/json 
+
+{
+   
+    "novoNome": "Monitor 24",
+    "novoPreco": 1500,
+    "novaQuantidade": 14
+}
+
+
+
+
