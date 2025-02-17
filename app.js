@@ -6,8 +6,8 @@ const express = require ('express')
 //Inicializando o servidor
 const app = express()
 
-//Middleware(meio termo)para pemitir o uso do json
-app.use(express.json());''
+//Middleware(meio termo)para pemitir o uso do json - analisa os dados JSON que vêm nas requisições HTTP e os transforma em um objeto JavaScript.
+app.use(express.json());
 
 const dotenv = require('dotenv')
 
@@ -33,11 +33,6 @@ app.get('/', (requisicao, resposta) => {
     }
 })
 
-//rota  /hello
-app.get('/', (requisicao, resposta) => {
-    resposta.send('Heloo Word')
-})
-
 
 //Rota de cadastro de produtos
 app.post('/', (requisicao, resposta) =>{
@@ -52,28 +47,39 @@ app.post('/', (requisicao, resposta) =>{
     }
 })
 
-
 //Rota de Editar  produtos
-// http:localhost:3000/1
 app.put('/:id', (requisicao, resposta) => {
     try { 
-        const {id} = requisicao.params;        
-        const produto = produtos.find(elemento) => elemento.id === id)
-        if (produto){
-            resposta.status(404).json({msg:"produto não encontrado"})
+        const id = parseInt(requisicao.params.id);      
+        const produto = produtos.find(elemento =>  elemento.id == id); 
+        if (!produto){
+            resposta.status(404).json({msg:"produto não encontrado"});
         }
         const {novoNome, novoPreco, novaQuantidade} = requisicao.body;
         if (produto){
             produto.nome = novoNome;
-            produto.preco= novoPreco;
-            produto.quntidade = novaQuantidade;
-            return produto
+            produto.preco = novoPreco;
+            produto.quantidade = novaQuantidade;
         }
-        resposta.status(200).json(Produto)
+        resposta.status(200).json(produto)
 
     } catch (error) {
-    resposta.status(500).json({msg:"erro ao editar produtos"})   
-        
+    resposta.status(500).json({msg:"erro ao editar produtos"})          
+    }                                                                                                                                                                                                                                                                                             
+})
+
+//Rota de deletar  produtos
+app.delete('/:id', (requisicao, resposta) => {
+    try {
+        const id = requisicao.params.id;
+        const produto = produtos.findIndex (elemento => elemento.id == id);
+        if(produto !== -1){
+            produtos.splice(produto,1)
+            resposta.json({msg:"produto deletado com sucesso"})
+        }else {
+            resposta.status(404).json({msg:"produto não encontrado"});
+        }
+    } catch (error) {
     }
 })
 
